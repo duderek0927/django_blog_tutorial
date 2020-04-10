@@ -8,9 +8,10 @@ from django.urls import reverse
 
 # Django-taggit
 from taggit.managers import TaggableManager
-
+from DjangoUeditor.models import UEditorField  # 头部增加这行代码导入UEditorField
 # 处理图片
 from PIL import Image
+
 
 class ArticleColumn(models.Model):
     """
@@ -18,7 +19,7 @@ class ArticleColumn(models.Model):
     """
     # 栏目标题
     title = models.CharField(max_length=100, blank=True)
-    
+
     # 创建时间
     created = models.DateTimeField(default=timezone.now)
 
@@ -60,7 +61,12 @@ class ArticlePost(models.Model):
 
     # 文章正文。
     # 保存大量文本使用 TextField
-    body = models.TextField()
+    # body = models.TextField()
+    body = UEditorField('内容', width=800, height=500,
+                        toolbars="full", imagePath="upimg/", filePath="upfile/",
+                        upload_settings={"imageMaxSize": 1204000},
+                        settings={}, command=None, blank=True
+                        )
 
     # 浏览量
     total_views = models.PositiveIntegerField(default=0)
@@ -68,7 +74,7 @@ class ArticlePost(models.Model):
     # 文章点赞数
     likes = models.PositiveIntegerField(default=0)
 
-    # 文章创建时间。 
+    # 文章创建时间。
     # DateTimeField 为一个日期字段
     # 参数 default=timezone.now 指定其在创建数据时将默认写入当前的时间
     created = models.DateTimeField(default=timezone.now)
@@ -80,14 +86,14 @@ class ArticlePost(models.Model):
     # 内部类 class Meta 用于给 model 定义元数据
     # 元数据：不是一个字段的任何数据
     class Meta:
-    	# ordering 指定模型返回的数据的排列顺序
-    	# '-created' 表明数据应该以倒序排列
+        # ordering 指定模型返回的数据的排列顺序
+        # '-created' 表明数据应该以倒序排列
         ordering = ('-created',)
 
     # 函数 __str__ 定义当调用对象的 str() 方法时的返回值内容
     # 它最常见的就是在Django管理后台中做为对象的显示值。因此应该总是为 __str__ 返回一个友好易读的字符串
     def __str__(self):
-    	# 将文章标题返回
+        # 将文章标题返回
         return self.title
 
     # 获取文章地址
@@ -113,7 +119,7 @@ class ArticlePost(models.Model):
     def was_created_recently(self):
         # 若文章是 1 分钟内发表的，则返回 True
         diff = timezone.now() - self.created
-        
+
         # if diff.days <= 0 and diff.seconds < 60:
         if diff.days == 0 and diff.seconds >= 0 and diff.seconds < 60:
             return True
