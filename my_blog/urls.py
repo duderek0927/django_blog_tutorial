@@ -29,5 +29,6 @@ urlpatterns = [
     path('notice/', include('notice.urls', namespace='notice')),
     # django-allauth
     path('accounts/', include('allauth.urls')),
+    path('ueditor/', include('DjangoUeditor.urls')),  # 添加DjangoUeditor的URL
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
