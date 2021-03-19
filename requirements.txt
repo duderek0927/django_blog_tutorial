@@ -13,7 +13,7 @@ django-notifications-hq==1.5.0
 django-password-reset==2.0
 django-taggit==1.1.0
 django-users2==0.2.2
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 easy-thumbnails==2.7
 idna==2.8
 jsonfield==2.0.2
